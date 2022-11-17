@@ -53,8 +53,8 @@ const About = () => {
             <img
               src="/assets/images/about.png"
               alt="About Us"
-              height="60%"
-              width="100%"
+              height="500px"
+              width="500px"
             />
           </div>
         </div>

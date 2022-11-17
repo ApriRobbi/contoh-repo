@@ -1,4 +1,11 @@
 import React from "react";
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+
+const LoginSchema = Yup.object().shape({
+  email: Yup.string().email('Invalid email').required('Required'),
+  password: Yup.string().min(8, 'Too short!').required('Required')
+});
 
 const Login = () => {
   return (
@@ -36,36 +43,48 @@ const Login = () => {
               ></button>
             </div>
             <div className="modal-body">
-              <form>
-                <div className="mb-3">
-                  <label htmlFor="exampleInputEmail1" className="form-label">
-                    Email address
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="exampleInputPassword1" className="form-label">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="exampleInputPassword1"
-                  />
-                </div>
+              <Formik
+                initialValues={{
+                  email: '',
+                  password: ''
+                }}
+                validationSchema={LoginSchema}
+                onSubmit={values => {
+                  // same shape as initial values
+                  window.location.reload();
+                  console.log(values);
+                }}
+              >
+                {({ errors, touched }) => (
+                  <Form>
+                    <div className="mb-3">
+                      <label className="form-label">
+                        Email
+                      </label>
+                      <Field name="email" className="form-control" placeholder="Input email"/>
 
-                <button
-                  type="submit"
-                  className="btn btn-outline-primary w-100 mt-5"
-                >
-                  Submit
-                </button>
-              </form>
+                      {errors.email && touched.email ? (
+
+                        <div>{errors.email}</div>
+
+                      ) : null}
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">
+                        Password
+                      </label>
+                      <Field type="password" name="password" className="form-control" placeholder="Input password"/>
+
+                      {errors.password && touched.password ? (
+
+                        <div>{errors.password}</div>
+
+                      ) : null}
+                    </div>
+                    <button type="submit" className="btn btn-outline-primary w-100">Submit</button>
+                  </Form>
+                )}
+              </Formik>
             </div>
           </div>
         </div>

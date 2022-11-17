@@ -1,4 +1,12 @@
 import React from "react";
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+
+const SignupSchema = Yup.object().shape({
+  username: Yup.string().min(8, 'Too short!').max(50, 'Too long!').required('Required'),
+  email: Yup.string().email('Invalid email').required('Required'),
+  password: Yup.string().min(8, 'Too short!').required('Required')
+});
 
 const Signup = () => {
   return (
@@ -36,46 +44,52 @@ const Signup = () => {
               ></button>
             </div>
             <div className="modal-body">
-              <form>
-                <div className="mb-3">
-                  <label htmlFor="exampleInput" className="form-label">
-                    Username
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="exampleInput"
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="exampleInputEmail1" className="form-label">
-                    Email address
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="exampleInputPassword1" className="form-label">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="exampleInputPassword1"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="btn btn-outline-primary w-100 mt-5"
-                >
-                  Register
-                </button>
-              </form>
+              <Formik
+                initialValues={{
+                  username: '',
+                  email: '',
+                  password: ''
+                }}
+                validationSchema={SignupSchema}
+                onSubmit={values => {
+                  // same shape as initial values
+                  window.location.reload();
+                  console.log(values);
+                }}
+              >
+                {({ errors, touched }) => (
+                  <Form>
+                    <div className="mb-3">
+                      <label className="form-label">
+                        Username
+                      </label>
+                      <Field name="username" className="form-control" placeholder="Input username"/>
+                      {errors.username && touched.username ? (
+                        <div>{errors.username}</div>
+                      ) : null}
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">
+                        Email
+                      </label>
+                      <Field name="email" className="form-control" placeholder="Input email"/>
+                      {errors.email && touched.email ? (
+                        <div>{errors.email}</div>
+                      ) : null}
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">
+                        Password
+                      </label>
+                      <Field type="password" name="password" className="form-control" placeholder="Input password"/>
+                      {errors.password && touched.password ? (
+                        <div>{errors.password}</div>
+                      ) : null}
+                    </div>
+                    <button type="submit" className="btn btn-outline-primary w-100">Register</button>
+                  </Form>
+                )}
+              </Formik>
             </div>
           </div>
         </div>

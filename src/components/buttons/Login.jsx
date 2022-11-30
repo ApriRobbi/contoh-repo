@@ -52,7 +52,7 @@ const Login = () => {
                 onSubmit={values => {
                   // same shape as initial values
                   window.location.reload();
-                  console.log("tested");
+                  console.log(values);
                 }}
               >
                 {({ errors, touched }) => (
